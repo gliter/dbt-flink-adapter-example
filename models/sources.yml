@@ -1,0 +1,63 @@
+version: 2
+sources:
+  - name: kafka
+    tables:
+      - name: clickstream
+        config:
+          connector_properties:
+            connector: 'kafka'
+            'properties.bootstrap.servers': 'kafka:29092'
+            'topic': 'clickstream'
+            'scan.startup.mode': 'earliest-offset'
+            'value.format': 'json'
+            'properties.group.id': 'dbt'
+            'value.json.encode.decimal-as-plain-number': 'true'
+        columns:
+          - name: event_timestamp
+            data_type: DECIMAL
+          - name: user_id
+            data_type: DECIMAL
+          - name: balance
+            data_type: DECIMAL
+          - name: loan_balance
+            data_type: DECIMAL
+          - name: event
+            data_type: STRING
+      - name: balance_change
+        config:
+          connector_properties:
+            connector: 'kafka'
+            'properties.bootstrap.servers': 'kafka:29092'
+            'topic': 'balance-change'
+            'scan.startup.mode': 'earliest-offset'
+            'value.format': 'json'
+            'properties.group.id': 'dbt'
+            'value.json.encode.decimal-as-plain-number': 'true'
+        columns:
+          - name: event_timestamp
+            data_type: DECIMAL
+          - name: user_id
+            data_type: DECIMAL
+          - name: balance_change
+            data_type: DECIMAL
+          - name: event
+            data_type: STRING
+      - name: loan_change
+        config:
+          connector_properties:
+            connector: 'kafka'
+            'properties.bootstrap.servers': 'kafka:29092'
+            'topic': 'loan-change'
+            'scan.startup.mode': 'earliest-offset'
+            'value.format': 'json'
+            'properties.group.id': 'dbt'
+            'value.json.encode.decimal-as-plain-number': 'true'
+        columns:
+          - name: event_timestamp
+            data_type: DECIMAL
+          - name: user_id
+            data_type: DECIMAL
+          - name: loan_balance_change
+            data_type: DECIMAL
+          - name: event
+            data_type: STRING
