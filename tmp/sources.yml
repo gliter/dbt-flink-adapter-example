@@ -1,0 +1,90 @@
+version: 2
+sources:
+  - name: kafka
+    tables:
+      - name: clickstream
+        config:
+          connector_properties:
+            connector: 'kafka'
+            'properties.bootstrap.servers': 'kafka:29092'
+            'topic': 'clickstream'
+            'scan.startup.mode': 'earliest-offset'
+            'value.format': 'json'
+            'properties.group.id': 'dbt'
+            'value.json.encode.decimal-as-plain-number': 'true'
+            'value.json.timestamp-format.standard': 'ISO-8601'
+          watermark:
+            column: event_timestamp
+            strategy: event_timestamp
+        columns:
+          - name: event_timestamp
+            data_type: TIMESTAMP(3)
+          - name: user_id
+            data_type: DECIMAL
+          - name: event
+            data_type: STRING
+      - name: init_balance
+        config:
+          connector_properties:
+            connector: 'kafka'
+            'properties.bootstrap.servers': 'kafka:29092'
+            'topic': 'init-balance'
+            'scan.startup.mode': 'earliest-offset'
+            'value.format': 'json'
+            'properties.group.id': 'dbt'
+            'value.json.encode.decimal-as-plain-number': 'true'
+        columns:
+          - name: user_id
+            data_type: DECIMAL
+          - name: deposit_balance
+            data_type: DECIMAL
+          - name: credit_balance
+            data_type: DECIMAL
+      - name: trx
+        config:
+          connector_properties:
+            connector: 'kafka'
+            'properties.bootstrap.servers': 'kafka:29092'
+            'topic': 'trx'
+            'scan.startup.mode': 'earliest-offset'
+            'value.format': 'json'
+            'properties.group.id': 'dbt'
+            'value.json.encode.decimal-as-plain-number': 'true'
+            'value.json.timestamp-format.standard': 'ISO-8601'
+          watermark:
+            column: event_timestamp
+            strategy: event_timestamp
+        columns:
+          - name: event_timestamp
+            data_type: TIMESTAMP(3)
+          - name: user_id
+            data_type: DECIMAL
+          - name: source
+            data_type: STRING
+          - name: target
+            data_type: STRING
+          - name: amount
+            data_type: DECIMAL
+          - name: deposit_balance_after_trx
+            data_type: DECIMAL
+          - name: credit_balance_after_trx
+            data_type: DECIMAL
+      - name: input
+        config:
+          connector_properties:
+            connector: 'kafka'
+            'properties.bootstrap.servers': 'kafka:29092'
+            'topic': 'input'
+            'scan.startup.mode': 'earliest-offset'
+            'value.format': 'json'
+            'properties.group.id': 'dbt'
+            'value.json.encode.decimal-as-plain-number': 'true'
+            'value.json.timestamp-format.standard': 'ISO-8601'
+          watermark:
+            column: event_timestamp
+            strategy: event_timestamp
+        columns:
+          - name: event_timestamp
+            data_type: TIMESTAMP(3)
+          - name: content
+            data_type: STRING

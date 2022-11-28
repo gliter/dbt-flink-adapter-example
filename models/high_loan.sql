@@ -1,4 +1,5 @@
-select /** fetch_mode('streaming') */ *
-from {{ source('kafka', 'loan_change') }}
-where event = 'take_loan'
-and loan_balance_change > 5000
+select *
+from {{ source('kafka', 'trx') }}
+where source = 'credit'
+and target = 'deposit'
+and amount > 5000

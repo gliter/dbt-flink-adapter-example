@@ -4,6 +4,7 @@ sources:
     tables:
       - name: clickstream
         config:
+          type: streaming
           connector_properties:
             connector: 'kafka'
             'properties.bootstrap.servers': 'kafka:29092'
@@ -12,52 +13,62 @@ sources:
             'value.format': 'json'
             'properties.group.id': 'dbt'
             'value.json.encode.decimal-as-plain-number': 'true'
+            'value.json.timestamp-format.standard': 'ISO-8601'
+          watermark:
+            column: event_timestamp
+            strategy: event_timestamp
         columns:
           - name: event_timestamp
-            data_type: DECIMAL
+            data_type: TIMESTAMP(3)
           - name: user_id
-            data_type: DECIMAL
-          - name: balance
-            data_type: DECIMAL
-          - name: loan_balance
             data_type: DECIMAL
           - name: event
             data_type: STRING
-      - name: balance_change
+      - name: init_balance
         config:
+          type: streaming
           connector_properties:
             connector: 'kafka'
             'properties.bootstrap.servers': 'kafka:29092'
-            'topic': 'balance-change'
+            'topic': 'init-balance'
             'scan.startup.mode': 'earliest-offset'
             'value.format': 'json'
             'properties.group.id': 'dbt'
             'value.json.encode.decimal-as-plain-number': 'true'
         columns:
-          - name: event_timestamp
-            data_type: DECIMAL
           - name: user_id
             data_type: DECIMAL
-          - name: balance_change
+          - name: deposit_balance
             data_type: DECIMAL
-          - name: event
-            data_type: STRING
-      - name: loan_change
+          - name: credit_balance
+            data_type: DECIMAL
+      - name: trx
         config:
+          type: streaming
           connector_properties:
             connector: 'kafka'
             'properties.bootstrap.servers': 'kafka:29092'
-            'topic': 'loan-change'
+            'topic': 'trx'
             'scan.startup.mode': 'earliest-offset'
             'value.format': 'json'
             'properties.group.id': 'dbt'
             'value.json.encode.decimal-as-plain-number': 'true'
+            'value.json.timestamp-format.standard': 'ISO-8601'
+          watermark:
+            column: event_timestamp
+            strategy: event_timestamp
         columns:
           - name: event_timestamp
-            data_type: DECIMAL
+            data_type: TIMESTAMP(3)
           - name: user_id
             data_type: DECIMAL
-          - name: loan_balance_change
-            data_type: DECIMAL
-          - name: event
+          - name: source
             data_type: STRING
+          - name: target
+            data_type: STRING
+          - name: amount
+            data_type: DECIMAL
+          - name: deposit_balance_after_trx
+            data_type: DECIMAL
+          - name: credit_balance_after_trx
+            data_type: DECIMAL

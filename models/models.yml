@@ -2,19 +2,13 @@ version: 2
 models:
   - name: high_loan
     config:
+      type: streaming
       connector_properties:
         connector: 'kafka'
         'properties.bootstrap.servers': 'kafka:29092'
         'topic': 'high-loan'
         'scan.startup.mode': 'earliest-offset'
         'value.format': 'json'
+        'value.json.encode.decimal-as-plain-number': 'true'
+        'value.json.timestamp-format.standard': 'ISO-8601'
         'properties.group.id': 'dbt'
-    columns:
-      - name: event_timestamp
-        data_type: DECIMAL
-      - name: user_id
-        data_type: DECIMAL
-      - name: loan_balance_change
-        data_type: DECIMAL
-      - name: event
-        data_type: STRING
