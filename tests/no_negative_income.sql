@@ -1,6 +1,6 @@
-select /** fetch_timeout_ms(5000) fetch_mode('streaming') */
+select /** fetch_timeout_ms(5000) mode('streaming') */
   *
-from {{ source("kafka", "balance_change")}}
+from {{ ref('joined_data')}}
 where
   event = 'income'
-  and balance_change < 0
+  and amount < 0
