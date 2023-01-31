@@ -4,34 +4,14 @@ seeds:
   - name: clickstream
     config:
       connector_properties:
-        connector: 'kafka'
-        'properties.bootstrap.servers': 'kafka:29092'
-        'topic': 'clickstream'
-        'value.format': 'json'
-        'properties.group.id': 'dbt-seed'
-        'value.json.encode.decimal-as-plain-number': 'true'
-        'scan.startup.mode': 'earliest-offset'
-        'value.json.timestamp-format.standard': 'ISO-8601'
+        topic: 'clickstream'
 
   - name: trx
     config:
       connector_properties:
-        connector: 'kafka'
-        'properties.bootstrap.servers': 'kafka:29092'
-        'topic': 'trx'
-        'value.format': 'json'
-        'properties.group.id': 'dbt-seed'
-        'value.json.encode.decimal-as-plain-number': 'true'
-        'scan.startup.mode': 'earliest-offset'
-        'value.json.timestamp-format.standard': 'ISO-8601'
+        topic: 'trx'
 
   - name: init_balance
     config:
       connector_properties:
-        connector: 'kafka'
-        'properties.bootstrap.servers': 'kafka:29092'
-        'topic': 'init-balance'
-        'value.format': 'json'
-        'properties.group.id': 'dbt-seed'
-        'value.json.encode.decimal-as-plain-number': 'true'
-        'scan.startup.mode': 'earliest-offset'
+        topic: 'init-balance'

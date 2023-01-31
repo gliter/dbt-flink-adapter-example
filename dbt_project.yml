@@ -35,6 +35,37 @@ models:
   example1:
     # Config indicated by + and applies to all files under models/example/
     +materialized: table
+    +type: streaming
     +database: default_catalog
     +schema: default_database
+    +default_connector_properties:
+      connector: 'kafka'
+      properties.bootstrap.servers: 'kafka:29092'
+      scan.startup.mode: 'earliest-offset'
+      value.format: 'json'
+      value.json.encode.decimal-as-plain-number: 'true'
+      value.json.timestamp-format.standard: 'ISO-8601'
+      properties.group.id: 'dbt'
 
+sources:
+  example1:
+    +type: streaming
+    +default_connector_properties:
+      connector: 'kafka'
+      properties.bootstrap.servers: 'kafka:29092'
+      scan.startup.mode: 'earliest-offset'
+      value.format: 'json'
+      value.json.encode.decimal-as-plain-number: 'true'
+      value.json.timestamp-format.standard: 'ISO-8601'
+      properties.group.id: 'dbt'
+
+seeds:
+  example1:
+    +default_connector_properties:
+      connector: 'kafka'
+      properties.bootstrap.servers: 'kafka:29092'
+      scan.startup.mode: 'earliest-offset'
+      value.format: 'json'
+      value.json.encode.decimal-as-plain-number: 'true'
+      value.json.timestamp-format.standard: 'ISO-8601'
+      properties.group.id: 'dbt'
